@@ -57,11 +57,7 @@ def main():
             out = call_llm(client=client, model=model, system_instructions=SYSTEM_INSTRUCTIONS, user_input=user_input)
             out_norm = normalize_output(out)
 
-        st.json({"query": query, "candidates": len(candidates), "picked": picked})
-        st.text(user_input)
-
         st.text(out_norm)
-
 
 if __name__ == "__main__":
     main()
