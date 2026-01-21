@@ -46,8 +46,8 @@ def main():
             # 검색 query 생성(규칙 기반)
             query = build_query_english(user_text)
 
-            # 명언 후보 가져오기(타임아웃 3초, 실패 시 1회 재시도)
-            candidates = fetch_quotes(query=query, timeout_seconds=3.0, retry_once=True)
+            # 명언 후보 가져오기(타임아웃 5초, 실패 시 1회 재시도)
+            candidates = fetch_quotes(query=query, timeout_seconds=5.0, retry_once=True)
             picked = pick_two_quotes(candidates)
 
             client = get_client()
@@ -56,6 +56,9 @@ def main():
             user_input = build_user_input(user_text=user_text, quotes=picked, crisis=crisis)
             out = call_llm(client=client, model=model, system_instructions=SYSTEM_INSTRUCTIONS, user_input=user_input)
             out_norm = normalize_output(out)
+
+        st.json({"query": query, "candidates": len(candidates), "picked": picked})
+        st.text(user_input)
 
         st.text(out_norm)
 

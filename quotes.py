@@ -1,7 +1,8 @@
 import requests
+import time
 
-# Quotable API
-QUOTABLE_BASE = "https://api.quotable.io"
+# QuoteGarden v3
+QUOTE_BASE = "https://quote-garden.onrender.com"
 
 # 한국어 입력 → 영문 query 매핑
 # 키워드는 부분 포함 기준으로 카운트
@@ -59,21 +60,33 @@ def fetch_quotes(query: str, timeout_seconds: float = 3.0, retry_once: bool = Tr
         "limit": 20,
         "page": 1,
     }
-    url = f"{QUOTABLE_BASE}/quotes"
+    url = f"{QUOTE_BASE}/api/v3/quotes" # 버전이 바뀔 때를 대비해 url은 이곳에
 
     def _call() -> list[dict]:
         r = requests.get(url, params=params, timeout=timeout_seconds)
         r.raise_for_status()
         data = r.json()
-        # results에 content/author 등이 담김
-        return data.get("results", []) if isinstance(data, dict) else []
 
+        raw = data.get("data", []) if isinstance(data, dict) else []
+
+        # 프로젝트 내부 인터페이스 유지를 위한 정규화
+        normalized = []
+        for q in raw:
+            if not isinstance(q, dict):
+                continue
+            normalized.append({
+                "content": q.get("quoteText", "").strip(),
+                "author": q.get("quoteAuthor", "").strip(),
+            })
+        return normalized
+            
     try:
         return _call()
     except Exception:
         if not retry_once:
             return []
         # 1회 재시도
+        time.sleep(1.2)
         try:
             return _call()
         except Exception:
