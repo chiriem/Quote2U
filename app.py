@@ -28,8 +28,8 @@ def call_llm(client: OpenAI, model: str, system_instructions: str, user_input: s
 
 
 def main():
-    st.set_page_config(page_title="기분/상황 → 명언2 + 조언2", page_icon="💬")
-    st.title("기분/상황을 쓰면 명언 2개와 조언 2개를 드립니다")
+    st.set_page_config(page_title="Quote2U", page_icon="💬")
+    st.title("기분/상황을 입력해주세요.")
 
     placeholder = (
         "예시)\n"
