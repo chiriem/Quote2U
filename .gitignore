@@ -1,4 +1,5 @@
 .streamlit/secrets.toml
 __pycache__/
-data/quotes.csv
 .ipynb_checkpoints/
+data/over68.csv
+data/quotes.csv
