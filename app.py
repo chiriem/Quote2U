@@ -29,7 +29,7 @@ def call_llm(client: OpenAI, model: str, system_instructions: str, user_input: s
 
 def main():
     st.set_page_config(page_title="Quote2U", page_icon="💬")
-    st.title("기분/상황을 입력해주세요.")
+    st.title("Quote2U.")
 
     placeholder = (
         "예시)\n"
@@ -57,11 +57,7 @@ def main():
             out = call_llm(client=client, model=model, system_instructions=SYSTEM_INSTRUCTIONS, user_input=user_input)
             out_norm = normalize_output(out)
 
-        st.json({"query": query, "candidates": len(candidates), "picked": picked})
-        st.text(user_input)
-
         st.text(out_norm)
-
 
 if __name__ == "__main__":
     main()
